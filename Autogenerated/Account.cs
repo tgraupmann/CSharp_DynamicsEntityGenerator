@@ -56,8 +56,13 @@
 	public string msdyn_travelchargetype { get; set; }
 	public string name { get; set; }
 	public string numberofemployees { get; set; }
+	public string opendeals { get; set; }
 	public string opendeals_date { get; set; }
+	public string opendeals_state { get; set; }
+	public string openrevenue { get; set; }
+	public string openrevenue_base { get; set; }
 	public string openrevenue_date { get; set; }
+	public string openrevenue_state { get; set; }
 	public string overriddencreatedon { get; set; }
 	public string ownerid { get; set; }
 	public string ownershipcode { get; set; }

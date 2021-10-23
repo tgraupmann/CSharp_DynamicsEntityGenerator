@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsEntityGenerator", "DynamicsEntityGenerator.csproj", "{9BEB2BE7-7C73-486C-A3D4-436BE64C4B4F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9BEB2BE7-7C73-486C-A3D4-436BE64C4B4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BEB2BE7-7C73-486C-A3D4-436BE64C4B4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BEB2BE7-7C73-486C-A3D4-436BE64C4B4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BEB2BE7-7C73-486C-A3D4-436BE64C4B4F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {33B5344D-48E1-4806-8269-AC9A5EE173CE}
+	EndGlobalSection
+EndGlobal

@@ -2,8 +2,10 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +13,44 @@ namespace DynamicsEntityGenerator
 {
     class Program
     {
+
+        static void GenerateEntity(string entity, Entity result)
+        {
+            //var myJSON = JsonConvert.SerializeObject(result);
+            foreach (var fvc in result.FormattedValues)
+            {
+                Console.WriteLine("Key={0} Value={1}", fvc.Key, fvc.Value);
+            }
+
+
+            if (string.IsNullOrEmpty(entity) || entity.Length < 2)
+            {
+                return;
+            }
+            string ucEntity = string.Format("{0}{1}", entity.Substring(0, 1).ToUpper(), entity.Substring(1));
+
+            string path = string.Format("{0}.cs", ucEntity);
+            /*
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            */
+            using (FileStream fs = File.Open(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
+            {
+                using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8))
+                {
+                    sw.WriteLine("public class {0}", ucEntity);
+                    sw.WriteLine("{0}", "{");
+                    foreach (var key in result.Attributes.Keys)
+                    {
+                        sw.WriteLine("\tpublic string {0} {1}", key, "{ get; set; }");
+                    }
+                    sw.WriteLine("{0}", "}");
+                    sw.Flush();
+                }
+            }
+        }
         static void Main(string[] args)
         {
             IOrganizationService oServiceProxy;
@@ -51,10 +91,7 @@ namespace DynamicsEntityGenerator
                     {
                         foreach (var result in results.Entities)
                         {
-                            foreach (string key in result.Attributes.Keys)
-                            {
-                                Console.WriteLine("Key={0} Value={1}", key, result.Attributes[key]);
-                            }
+                            GenerateEntity(entity, result);
                         }
                     }
                 }

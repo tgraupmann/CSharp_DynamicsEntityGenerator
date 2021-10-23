@@ -14,15 +14,8 @@ namespace DynamicsEntityGenerator
     class Program
     {
 
-        static void GenerateEntity(string entity, Entity result)
+        static void GenerateEntity(string entity, SortedList<string, string> columns)
         {
-            //var myJSON = JsonConvert.SerializeObject(result);
-            foreach (var fvc in result.FormattedValues)
-            {
-                Console.WriteLine("Key={0} Value={1}", fvc.Key, fvc.Value);
-            }
-
-
             if (string.IsNullOrEmpty(entity) || entity.Length < 2)
             {
                 return;
@@ -42,9 +35,9 @@ namespace DynamicsEntityGenerator
                 {
                     sw.WriteLine("public class {0}", ucEntity);
                     sw.WriteLine("{0}", "{");
-                    foreach (var key in result.Attributes.Keys)
+                    foreach (var column in columns.Keys)
                     {
-                        sw.WriteLine("\tpublic string {0} {1}", key, "{ get; set; }");
+                        sw.WriteLine("\tpublic string {0} {1}", column, "{ get; set; }");
                     }
                     sw.WriteLine("{0}", "}");
                     sw.Flush();
@@ -85,14 +78,30 @@ namespace DynamicsEntityGenerator
                 {
                     var query = new QueryExpression(entity);
                     query.ColumnSet = new Microsoft.Xrm.Sdk.Query.ColumnSet(true);
-                    query.TopCount = 1;
+                    //query.TopCount = 1;
                     var results = oServiceProxy.RetrieveMultiple(query);
                     if (results != null)
                     {
+                        SortedList<string, string> columns = new SortedList<string, string>();
                         foreach (var result in results.Entities)
                         {
-                            GenerateEntity(entity, result);
+                            foreach (string key in result.Attributes.Keys)
+                            {
+                                if (!columns.ContainsKey(key))
+                                {
+                                    columns.Add(key, null);
+                                }
+                            }
+
+                            /*
+                            var myJSON = JsonConvert.SerializeObject(result);
+                            foreach (var fvc in result.FormattedValues)
+                            {
+                                Console.WriteLine("Key={0} Value={1}", fvc.Key, fvc.Value);
+                            }
+                            */
                         }
+                        GenerateEntity(entity, columns);
                     }
                 }
             }

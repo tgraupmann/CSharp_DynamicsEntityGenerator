@@ -105,3 +105,5 @@ client.SaveCSV(Path.Combine(dataPath, "Users2.csv"), users);
 List<Task> tasks = client.LoadCSV<Task>(Path.Combine(dataPath, "Tasks.csv"));
 client.SaveCSV(Path.Combine(dataPath, "Tasks2.csv"), tasks);
 ```
+
+![image_2](images/image_2.png)

@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace DynamicsEntityGenerator
@@ -56,9 +57,21 @@ namespace DynamicsEntityGenerator
                 client.GenerateClasses(dataPath, entities);
 
                 client.QueryDatabaseToCSV<Account>(Path.Combine(dataPath, "Accounts.csv"));
-                client.QueryDatabaseToCSV<Contact>(Path.Combine(dataPath, "Contact.csv"));
-                client.QueryDatabaseToCSV<Systemuser>(Path.Combine(dataPath, "User.csv"));
-                client.QueryDatabaseToCSV<Task>(Path.Combine(dataPath, "Task.csv"));
+                client.QueryDatabaseToCSV<Contact>(Path.Combine(dataPath, "Contacts.csv"));
+                client.QueryDatabaseToCSV<Systemuser>(Path.Combine(dataPath, "Users.csv"));
+                client.QueryDatabaseToCSV<Task>(Path.Combine(dataPath, "Tasks.csv"));
+
+                List<Account> accounts = client.LoadCSV<Account>(Path.Combine(dataPath, "Accounts.csv"));
+                client.SaveCSV(Path.Combine(dataPath, "Accounts2.csv"), accounts);
+
+                List<Contact> contacts = client.LoadCSV<Contact>(Path.Combine(dataPath, "Contacts.csv"));
+                client.SaveCSV(Path.Combine(dataPath, "Contacts2.csv"), contacts);
+
+                List<Systemuser> users = client.LoadCSV<Systemuser>(Path.Combine(dataPath, "Users.csv"));
+                client.SaveCSV(Path.Combine(dataPath, "Users2.csv"), users);
+
+                List<Task> tasks = client.LoadCSV<Task>(Path.Combine(dataPath, "Tasks.csv"));
+                client.SaveCSV(Path.Combine(dataPath, "Tasks2.csv"), tasks);
             }
             else
             {

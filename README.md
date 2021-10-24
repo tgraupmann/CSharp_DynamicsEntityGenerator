@@ -90,6 +90,8 @@ client.QueryDatabaseToCSV<Systemuser>(Path.Combine(dataPath, "Users.csv"));
 client.QueryDatabaseToCSV<Task>(Path.Combine(dataPath, "Tasks.csv"));
 ```
 
+![image_3](images/image_3.png)
+
 * Load CSV records and resave to compare data integrity.
 
 ```

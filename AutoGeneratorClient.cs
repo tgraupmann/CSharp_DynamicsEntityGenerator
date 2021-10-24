@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
@@ -79,64 +80,6 @@ namespace DynamicsEntityGenerator
                             Console.Error.WriteLine("Field Not Mapped! Key={0} Value={1}", ac.Key, ac.Value);
                         }
                     }
-                    //child values
-                    foreach (var ac in record.Attributes)
-                    {
-                        string attribute = string.Format("attribute_{0}", ac.Key);
-                        if (dictProp.ContainsKey(attribute))
-                        {
-                            PropertyInfo p = dictProp[attribute];
-                            if (HasChildProperties(p.PropertyType))
-                            {
-                                string childAttribute = string.Format("attribute_{0}_value", ac.Key);
-                                PropertyInfo childP = typeof(T).GetProperty(childAttribute);
-
-                                EntityReference childEntityReference;
-                                Money childMoney;
-                                OptionSetValue childOptionSetValue;
-                                switch (p.PropertyType.FullName)
-                                {
-                                    case "Microsoft.Xrm.Sdk.EntityReference":
-                                        childEntityReference = ac.Value as EntityReference;
-                                        if (childEntityReference != null)
-                                        {
-                                            SetChildProperty(item, string.Format("attribute_{0}_id", ac.Key), childEntityReference.Id);
-                                            SetChildProperty(item, string.Format("attribute_{0}_logical_name", ac.Key), childEntityReference.LogicalName);
-                                            SetChildProperty(item, string.Format("attribute_{0}_name", ac.Key), childEntityReference.Name);
-                                        }
-                                        break;
-                                    case "Microsoft.Xrm.Sdk.Money":
-                                        if (childP == null)
-                                        {
-                                            Console.Error.WriteLine("Child Property Not Mapped! Key={0} Value={1}", childAttribute, ac.Value);
-                                        }
-                                        else
-                                        {
-                                            childMoney = ac.Value as Money;
-                                            if (childMoney != null)
-                                            {
-                                                childP.SetValue(item, childMoney.Value.ToString());
-                                            }
-                                        }
-                                        break;
-                                    case "Microsoft.Xrm.Sdk.OptionSetValue":
-                                        if (childP == null)
-                                        {
-                                            Console.Error.WriteLine("Child Property Not Mapped! Key={0} Value={1}", childAttribute, ac.Value);
-                                        }
-                                        else
-                                        {
-                                            childOptionSetValue = ac.Value as OptionSetValue;
-                                            if (childOptionSetValue != null)
-                                            {
-                                                childP.SetValue(item, childOptionSetValue.Value.ToString());
-                                            }
-                                        }
-                                        break;
-                                }
-                            }
-                        }
-                    }
                     //formatted values
                     foreach (var fv in record.FormattedValues)
                     {
@@ -155,19 +98,6 @@ namespace DynamicsEntityGenerator
                 }
             }
             return list;
-        }
-
-        bool HasChildProperties(Type type)
-        {
-            switch (type.FullName)
-            {
-                case "Microsoft.Xrm.Sdk.EntityReference":
-                case "Microsoft.Xrm.Sdk.Money":
-                case "Microsoft.Xrm.Sdk.OptionSetValue":
-                    return true;
-                default:
-                    return false;
-            }
         }
 
         void GenerateEntity(string outputPath, string entity, SortedList<string, Type> attributes, SortedList<string, Type> formattedValues)
@@ -189,37 +119,8 @@ namespace DynamicsEntityGenerator
                     foreach (KeyValuePair<string, Type> attribute in attributes)
                     {
                         sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Name(\"attribute_{0}\")]", attribute.Key);
-                        if (HasChildProperties(attribute.Value))
-                        {
-                            sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Ignore]");
-                        }
                         sw.WriteLine("\tpublic {0} attribute_{1} {2}", attribute.Value, attribute.Key, "{ get; set; }");
                         sw.WriteLine();
-
-                        if (HasChildProperties(attribute.Value))
-                        {
-                            switch (attribute.Value.FullName)
-                            {
-                                case "Microsoft.Xrm.Sdk.EntityReference":
-                                    sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Name(\"attribute_{0}.Id\")]", attribute.Key);
-                                    sw.WriteLine("\tpublic System.String attribute_{0}_id {1}", attribute.Key, "{ get; set; }");
-                                    sw.WriteLine();
-
-                                    sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Name(\"attribute_{0}.LogicalName\")]", attribute.Key);
-                                    sw.WriteLine("\tpublic System.String attribute_{0}_logical_name {1}", attribute.Key, "{ get; set; }");
-                                    sw.WriteLine();
-
-                                    sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Name(\"attribute_{0}.Name\")]", attribute.Key);
-                                    sw.WriteLine("\tpublic System.String attribute_{0}_name {1}", attribute.Key, "{ get; set; }");
-                                    sw.WriteLine();
-                                    break;
-                                default:
-                                    sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Name(\"attribute_{0}.Value\")]", attribute.Key);
-                                    sw.WriteLine("\tpublic System.String attribute_{0}_value {1}", attribute.Key, "{ get; set; }");
-                                    sw.WriteLine();
-                                    break;
-                            }                            
-                        }
                     }
                     foreach (KeyValuePair<string, Type> formattedValue in formattedValues)
                     {
@@ -274,6 +175,11 @@ namespace DynamicsEntityGenerator
             }
         }
 
+        static string Delegate_ReferenceHeaderPrefix(ReferenceHeaderPrefixArgs args)
+        {
+            return string.Format("{0}.", args.MemberName);
+        }
+
         public void SaveCSV<T>(string outputPath, List<T> results) where T : IAutogeneratedClass
         {
             if (results != null)
@@ -282,7 +188,12 @@ namespace DynamicsEntityGenerator
                 {
                     using (StreamWriter writer = new StreamWriter(fsWrite, Encoding.UTF8))
                     {
-                        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+                        {
+                            ReferenceHeaderPrefix = Delegate_ReferenceHeaderPrefix
+                        };
+
+                        using (var csv = new CsvWriter(writer, config))
                         {
                             csv.WriteHeader<T>();
                             csv.NextRecord();
@@ -313,7 +224,11 @@ namespace DynamicsEntityGenerator
             List<T> list = new List<T>();
             using (var reader = new StreamReader(inputPath, Encoding.UTF8))
             {
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+                {
+                    ReferenceHeaderPrefix = Delegate_ReferenceHeaderPrefix
+                };
+                using (var csv = new CsvReader(reader, config))
                 {
                     IEnumerable<T> tempT = csv.GetRecords<T>();
                     foreach (T record in tempT)

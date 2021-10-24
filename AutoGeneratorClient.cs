@@ -81,6 +81,19 @@ namespace DynamicsEntityGenerator
             return list;
         }
 
+        bool HasChildProperties(Type type)
+        {
+            switch (type.FullName)
+            {
+                case "Microsoft.Xrm.Sdk.EntityReference":
+                case "Microsoft.Xrm.Sdk.Money":
+                case "Microsoft.Xrm.Sdk.OptionSetValue":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         void GenerateEntity(string outputPath, string entity, SortedList<string, Type> attributes, SortedList<string, Type> formattedValues)
         {
             if (string.IsNullOrEmpty(entity) || entity.Length < 2)
@@ -100,16 +113,19 @@ namespace DynamicsEntityGenerator
                     foreach (KeyValuePair<string, Type> attribute in attributes)
                     {
                         sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Name(\"attribute_{0}\")]", attribute.Key);
-                        switch (attribute.Value.FullName)
+                        if (HasChildProperties(attribute.Value))
                         {
-                            case "Microsoft.Xrm.Sdk.EntityReference":
-                            case "Microsoft.Xrm.Sdk.Money":
-                            case "Microsoft.Xrm.Sdk.OptionSetValue":
-                                sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Ignore]");
-                                break;
+                            sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Ignore]");
                         }
                         sw.WriteLine("\tpublic {0} attribute_{1} {2}", attribute.Value, attribute.Key, "{ get; set; }");
                         sw.WriteLine();
+
+                        if (HasChildProperties(attribute.Value))
+                        {
+                            sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Name(\"attribute_{0}.Value\")]", attribute.Key);
+                            sw.WriteLine("\tpublic System.String attribute_{0}_value {1}", attribute.Key, "{ get; set; }");
+                            sw.WriteLine();
+                        }
                     }
                     foreach (KeyValuePair<string, Type> formattedValue in formattedValues)
                     {

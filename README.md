@@ -1,6 +1,6 @@
 # C# Dynamics 365 Entity Generator
 
-This C# project that queries your Dynamics environment and uses the returned records to autogenerate early binding C# classes that can be easily saved/loaded to/from the CSV UTF8 format.
+This C# project that queries your Dynamics environment and uses the returned records to autogenerate early bound C# classes that can be easily saved/loaded to/from the CSV UTF8 format.
 
 ![image_1](images/image_1.png)
 

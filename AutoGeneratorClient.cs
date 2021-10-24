@@ -47,7 +47,7 @@ namespace DynamicsEntityGenerator
                 foreach (var record in results.Entities)
                 {
                     T item = new T();
-                    ///*
+                    //attributes
                     foreach (var ac in record.Attributes)
                     {
                         string attribute = string.Format("attribute_{0}", ac.Key);
@@ -61,7 +61,55 @@ namespace DynamicsEntityGenerator
                             Console.Error.WriteLine("Field Not Mapped! Key={0} Value={1}", ac.Key, ac.Value);
                         }
                     }
-                    //*/
+                    //child values
+                    foreach (var ac in record.Attributes)
+                    {
+                        string attribute = string.Format("attribute_{0}", ac.Key);
+                        if (dictProp.ContainsKey(attribute))
+                        {
+                            PropertyInfo p = dictProp[attribute];
+                            if (HasChildProperties(p.PropertyType))
+                            {
+                                string childAttribute = string.Format("attribute_{0}_value", ac.Key);
+                                PropertyInfo childP = typeof(T).GetProperty(childAttribute);
+                                if (childP == null)
+                                {
+                                    Console.Error.WriteLine("Child Field Not Mapped! Key={0} Value={1}", childAttribute, ac.Value);
+                                }
+                                else
+                                {
+                                    EntityReference childEntityReference;
+                                    Money childMoney;
+                                    OptionSetValue childOptionSetValue;
+                                    switch (p.PropertyType.FullName)
+                                    {
+                                        case "Microsoft.Xrm.Sdk.EntityReference":
+                                            childEntityReference = ac.Value as EntityReference;
+                                            if (childEntityReference != null)
+                                            {
+                                                childP.SetValue(item, childEntityReference.Id.ToString());
+                                            }
+                                            break;
+                                        case "Microsoft.Xrm.Sdk.Money":
+                                            childMoney = ac.Value as Money;
+                                            if (childMoney != null)
+                                            {
+                                                childP.SetValue(item, childMoney.Value.ToString());
+                                            }
+                                            break;
+                                        case "Microsoft.Xrm.Sdk.OptionSetValue":
+                                            childOptionSetValue = ac.Value as OptionSetValue;
+                                            if (childOptionSetValue != null)
+                                            {
+                                                childP.SetValue(item, childOptionSetValue.Value.ToString());
+                                            }
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //formatted values
                     foreach (var fv in record.FormattedValues)
                     {
                         string formattedValue = string.Format("formatted_value_{0}", fv.Key);

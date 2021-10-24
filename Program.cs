@@ -86,28 +86,28 @@ namespace DynamicsEntityGenerator
                 query.ColumnSet = new Microsoft.Xrm.Sdk.Query.ColumnSet(true);
                 //query.TopCount = 1;
                 List<Account> accounts = client.RetrieveMultiple<Account>(query);
-                SaveCSV<Account>(Path.Combine(outputPath, "Accounts.csv"), accounts);
+                SaveCSV(Path.Combine(outputPath, "Accounts.csv"), accounts);
 
                 // contact
                 query = client.NewQueryExpression<Contact>();
                 query.ColumnSet = new Microsoft.Xrm.Sdk.Query.ColumnSet(true);
                 //query.TopCount = 1;
                 List<Contact> contacts = client.RetrieveMultiple<Contact>(query);
-                SaveCSV<Contact>(Path.Combine(outputPath, "Contact.csv"), contacts);
+                SaveCSV(Path.Combine(outputPath, "Contact.csv"), contacts);
 
                 // Systemuser
                 query = client.NewQueryExpression<Systemuser>();
                 query.ColumnSet = new Microsoft.Xrm.Sdk.Query.ColumnSet(true);
                 //query.TopCount = 1;
                 List<Systemuser> users = client.RetrieveMultiple<Systemuser>(query);
-                SaveCSV<Systemuser>(Path.Combine(outputPath, "User.csv"), users);
+                SaveCSV(Path.Combine(outputPath, "User.csv"), users);
 
                 // Task
                 query = client.NewQueryExpression<Task>();
                 query.ColumnSet = new Microsoft.Xrm.Sdk.Query.ColumnSet(true);
                 //query.TopCount = 1;
                 List<Task> tasks = client.RetrieveMultiple<Task>(query);
-                SaveCSV<Task>(Path.Combine(outputPath, "Task.csv"), tasks);
+                SaveCSV(Path.Combine(outputPath, "Task.csv"), tasks);
 
             }
             else

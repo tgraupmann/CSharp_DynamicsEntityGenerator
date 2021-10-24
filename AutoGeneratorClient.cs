@@ -237,6 +237,7 @@ namespace DynamicsEntityGenerator
                     }
                 }
             }
+            Console.WriteLine("Loaded {0} records from {1}", typeof(T), inputPath);
             return list;
         }
     }

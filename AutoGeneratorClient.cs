@@ -100,6 +100,14 @@ namespace DynamicsEntityGenerator
                     foreach (KeyValuePair<string, Type> attribute in attributes)
                     {
                         sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Name(\"attribute_{0}\")]", attribute.Key);
+                        switch (attribute.Value.FullName)
+                        {
+                            case "Microsoft.Xrm.Sdk.EntityReference":
+                            case "Microsoft.Xrm.Sdk.Money":
+                            case "Microsoft.Xrm.Sdk.OptionSetValue":
+                                sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Ignore]");
+                                break;
+                        }
                         sw.WriteLine("\tpublic {0} attribute_{1} {2}", attribute.Value, attribute.Key, "{ get; set; }");
                         sw.WriteLine();
                     }

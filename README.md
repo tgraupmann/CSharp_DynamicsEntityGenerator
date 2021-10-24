@@ -79,7 +79,7 @@ List<AutoGeneratorClient.GenerateEntityItem> entityItems =
     new AutoGeneratorClient.GenerateEntityItem("task", "Task"),
 };
 
-client.GenerateClasses(dataPath, entityItems);s);
+client.GenerateClasses(dataPath, entityItems);
 ```
 
 * Query all entity records and easily save to CSV files.

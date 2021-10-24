@@ -69,7 +69,7 @@ namespace DynamicsEntityGenerator
                     //attributes
                     foreach (var ac in record.Attributes)
                     {
-                        string attribute = string.Format("attribute_{0}", ac.Key);
+                        string attribute = ac.Key;
                         if (dictProp.ContainsKey(attribute))
                         {
                             PropertyInfo p = dictProp[attribute];
@@ -118,8 +118,8 @@ namespace DynamicsEntityGenerator
                     sw.WriteLine("{0}", "{");
                     foreach (KeyValuePair<string, Type> attribute in attributes)
                     {
-                        sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Name(\"attribute_{0}\")]", attribute.Key);
-                        sw.WriteLine("\tpublic {0} attribute_{1} {2}", attribute.Value, attribute.Key, "{ get; set; }");
+                        sw.WriteLine("\t[CsvHelper.Configuration.Attributes.Name(\"{0}\")]", attribute.Key);
+                        sw.WriteLine("\tpublic {0} {1} {2}", attribute.Value, attribute.Key, "{ get; set; }");
                         sw.WriteLine();
                     }
                     foreach (KeyValuePair<string, Type> formattedValue in formattedValues)

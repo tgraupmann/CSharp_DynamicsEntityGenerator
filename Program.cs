@@ -48,11 +48,20 @@ namespace DynamicsEntityGenerator
                 Secrets.ClientId,
                 Secrets.Secret);
 
-            //Create the Dynamics 365 Connection:
-            CrmServiceClient oMSCRMConn = new Microsoft.Xrm.Tooling.Connector.CrmServiceClient(connection);
+            IOrganizationService oServiceProxy = null;
+            try
+            {
 
-            //Create the IOrganizationService:
-            IOrganizationService oServiceProxy = (IOrganizationService)oMSCRMConn.OrganizationWebProxyClient != null ? (IOrganizationService)oMSCRMConn.OrganizationWebProxyClient : (IOrganizationService)oMSCRMConn.OrganizationServiceProxy;
+                //Create the Dynamics 365 Connection:
+                CrmServiceClient oMSCRMConn = new Microsoft.Xrm.Tooling.Connector.CrmServiceClient(connection);
+
+                //Create the IOrganizationService:
+                oServiceProxy = (IOrganizationService)oMSCRMConn.OrganizationWebProxyClient != null ? (IOrganizationService)oMSCRMConn.OrganizationWebProxyClient : (IOrganizationService)oMSCRMConn.OrganizationServiceProxy;
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine("Failed to initialize connection! {0}", ex);
+            }
 
 
             if (oServiceProxy != null)

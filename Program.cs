@@ -183,8 +183,8 @@ namespace DynamicsEntityGenerator
             if (oServiceProxy != null)
             {
                 //Get the current user ID:
-                Guid userid = ((WhoAmIResponse)oServiceProxy.Execute(new WhoAmIRequest())).UserId;
-
+                WhoAmIResponse whoAmI = (WhoAmIResponse)oServiceProxy.Execute(new WhoAmIRequest());
+                Guid userid = whoAmI.UserId;
                 if (userid != Guid.Empty)
                 {
                     Console.WriteLine("Connection Successful!");

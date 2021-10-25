@@ -210,7 +210,7 @@ namespace DynamicsEntityGenerator
         {
             T item = new T();
 
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.UtcNow - TimeSpan.FromMinutes(1);
 
             PropertyInfo[] properties = typeof(T).GetProperties();
             foreach (PropertyInfo p in properties)
@@ -315,7 +315,7 @@ namespace DynamicsEntityGenerator
                     }
                     catch (Exception ex)
                     {
-                        Console.Error.WriteLine("Failed to add {0} record! {0}", typeof(T), ex);
+                        Console.Error.WriteLine("Failed to add {0} record! {1}", typeof(T), ex);
                     }
                     if (id != Guid.Empty)
                     {

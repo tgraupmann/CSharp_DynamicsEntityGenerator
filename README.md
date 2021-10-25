@@ -174,7 +174,7 @@ ConditionExpression condition =
 
 filter.AddCondition(condition);
 
-List <Account> records = client.RetrieveMultiple<Account>(query);
+List<Account> records = client.RetrieveMultiple<Account>(query);
 ```
 
 **Delete a record**

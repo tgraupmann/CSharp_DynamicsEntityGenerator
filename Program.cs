@@ -1,5 +1,6 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,14 @@ namespace DynamicsEntityGenerator
 
                 List<Task> tasks = client.LoadCSV<Task>(Path.Combine(dataPath, "Tasks.csv"));
                 client.SaveCSV(Path.Combine(dataPath, "Tasks2.csv"), tasks);
+
+                if (accounts.Count > 1)
+                {
+                    Account account = accounts[1];
+                    ColumnSet columnSet = new ColumnSet(true);
+                    var result = client.Retrieve<Account>(account.accountid, columnSet);
+                    client.SaveCSV(Path.Combine(dataPath, "Account_Single.csv"), result);
+                }
             }
             else
             {

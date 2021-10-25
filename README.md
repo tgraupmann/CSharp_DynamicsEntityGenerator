@@ -110,3 +110,11 @@ client.SaveCSV(Path.Combine(dataPath, "Tasks2.csv"), tasks);
 ```
 
 ![image_2](images/image_2.png)
+
+* Query a single record
+
+```
+ColumnSet columnSet = new ColumnSet(true);
+var result = client.Retrieve<Account>(account.accountid, columnSet);
+client.SaveCSV(Path.Combine(dataPath, "Account_Single.csv"), result);
+```

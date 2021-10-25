@@ -93,6 +93,23 @@ client.QueryDatabaseToCSV<Task>(Path.Combine(dataPath, "Tasks.csv"));
 
 ![image_3](images/image_3.png)
 
+* Query a single record
+
+```
+ColumnSet columnSet = new ColumnSet(true);
+Account record = client.Retrieve<Account>(Guid.Parse("93c71621-bd9f-e711-8122-000d3a2ba2ea"), columnSet);
+```
+
+* Query multiple records
+
+```
+ColumnSet columnSet = new ColumnSet(true);
+QueryExpression query = client.NewQueryExpression<Account>();
+query.ColumnSet = new ColumnSet(true);
+query.TopCount = 100;
+List<Account> records = client.RetrieveMultiple<Account>(query);
+```
+
 * Load CSV records and resave to compare data integrity.
 
 ```
@@ -110,14 +127,6 @@ client.SaveCSV(Path.Combine(dataPath, "Tasks2.csv"), tasks);
 ```
 
 ![image_2](images/image_2.png)
-
-* Query a single record
-
-```
-ColumnSet columnSet = new ColumnSet(true);
-var result = client.Retrieve<Account>(account.accountid, columnSet);
-client.SaveCSV(Path.Combine(dataPath, "Account_Single.csv"), result);
-```
 
 * Update a record
 

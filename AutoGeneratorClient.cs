@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 
 namespace DynamicsEntityGenerator
 {
@@ -304,15 +305,25 @@ namespace DynamicsEntityGenerator
                 }
 
                 Guid id = Guid.Empty;
-                try
+                int retries = 0;
+                do
                 {
-                    id = _mServiceProxy.Create(entity);
-                    Console.WriteLine("Record {0} Created!", typeof(T));
+                    try
+                    {
+                        id = _mServiceProxy.Create(entity);
+                        Console.WriteLine("Record {0} Created!", typeof(T));
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Error.WriteLine("Failed to add {0} record! {0}", typeof(T), ex);
+                    }
+                    if (id != Guid.Empty)
+                    {
+                        break;
+                    }
+                    Thread.Sleep(1000);
                 }
-                catch (Exception ex)
-                {
-                    Console.Error.WriteLine("Failed to add {0} record! {0}", typeof(T), ex);
-                }
+                while (++retries < 5);
                 return id;
             }
             return Guid.Empty;

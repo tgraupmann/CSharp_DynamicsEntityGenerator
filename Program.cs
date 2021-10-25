@@ -117,7 +117,7 @@ namespace DynamicsEntityGenerator
 
                 ColumnSet columnSet = new ColumnSet(true);
                 var result = client.Retrieve<Account>(account.accountid, columnSet);
-                client.SaveCSV(Path.Combine(dataPath, "Account_Created_Queried.csv"), account);
+                client.SaveCSV(Path.Combine(dataPath, "Account_Created_Queried.csv"), result);
 
                 return account;
             }

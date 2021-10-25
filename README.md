@@ -148,3 +148,23 @@ var result = client.Retrieve<Account>(account.accountid, columnSet);
 result.name = string.Format("{0}*", result.name); //add an asterisk so we can see it change
 client.Update(result);
 ```
+
+* Query with a filter
+
+```
+QueryExpression query = client.NewQueryExpression<Account>();
+query.ColumnSet = new ColumnSet(true);
+query.TopCount = 10;
+
+FilterExpression filter = query.Criteria;
+
+ConditionExpression condition =
+    client.NewConditionExpression<Account>(
+        Account.Attribute.name,
+        ConditionOperator.Equal,
+        "Microsoft");
+
+filter.AddCondition(condition);
+
+List <Account> records = client.RetrieveMultiple<Account>(query);
+```

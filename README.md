@@ -123,6 +123,6 @@ client.SaveCSV(Path.Combine(dataPath, "Account_Single.csv"), result);
 
 ```
 var result = client.Retrieve<Account>(account.accountid, columnSet);
-result.name = string.Format("{0}*", result.name); //add an asteriks so we can see it change
+result.name = string.Format("{0}*", result.name); //add an asterisk so we can see it change
 client.Update(result);
 ```

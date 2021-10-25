@@ -32,10 +32,11 @@ namespace DynamicsEntityGenerator
 This mode uses the following `ConnectionString` format.
 
 ```
-string connectionString = string.Format("AuthType=ClientSecret;Url={0};ClientId={1};ClientSecret={2}",
-                Secrets.ServiceUrl,
-                Secrets.ClientId,
-                Secrets.Secret);
+string connectionString =
+    string.Format("AuthType=ClientSecret;Url={0};ClientId={1};ClientSecret={2}",
+        Secrets.ServiceUrl,
+        Secrets.ClientId,
+        Secrets.Secret);
 ```
 
 * Authenticate the service client with OAuth2.
@@ -49,7 +50,9 @@ try
     CrmServiceClient oMSCRMConn = new Microsoft.Xrm.Tooling.Connector.CrmServiceClient(connectionString);
 
     //Create the IOrganizationService:
-    oServiceProxy = (IOrganizationService)oMSCRMConn.OrganizationWebProxyClient != null ? (IOrganizationService)oMSCRMConn.OrganizationWebProxyClient : (IOrganizationService)oMSCRMConn.OrganizationServiceProxy;
+    oServiceProxy = (IOrganizationService)oMSCRMConn.OrganizationWebProxyClient != null ?
+        (IOrganizationService)oMSCRMConn.OrganizationWebProxyClient :
+        (IOrganizationService)oMSCRMConn.OrganizationServiceProxy;
 }
 catch (Exception ex)
 {
@@ -97,7 +100,8 @@ client.QueryDatabaseToCSV<Task>(Path.Combine(dataPath, "Tasks.csv"));
 
 ```
 ColumnSet columnSet = new ColumnSet(true);
-Account record = client.Retrieve<Account>(Guid.Parse("93c71621-bd9f-e711-8122-000d3a2ba2ea"), columnSet);
+Account record = client.Retrieve<Account>(
+    Guid.Parse("93c71621-bd9f-e711-8122-000d3a2ba2ea"), columnSet);
 ```
 
 * Query multiple records

@@ -118,3 +118,11 @@ ColumnSet columnSet = new ColumnSet(true);
 var result = client.Retrieve<Account>(account.accountid, columnSet);
 client.SaveCSV(Path.Combine(dataPath, "Account_Single.csv"), result);
 ```
+
+* Update a record
+
+```
+var result = client.Retrieve<Account>(account.accountid, columnSet);
+result.name = string.Format("{0}*", result.name); //add an asteriks so we can see it change
+client.Update(result);
+```

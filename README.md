@@ -47,7 +47,8 @@ try
 {
 
     //Create the Dynamics 365 Connection:
-    CrmServiceClient oMSCRMConn = new Microsoft.Xrm.Tooling.Connector.CrmServiceClient(connectionString);
+    CrmServiceClient oMSCRMConn =
+        new Microsoft.Xrm.Tooling.Connector.CrmServiceClient(connectionString);
 
     //Create the IOrganizationService:
     oServiceProxy = (IOrganizationService)oMSCRMConn.OrganizationWebProxyClient != null ?

@@ -10,9 +10,17 @@ This C# project that queries your Dynamics environment and uses the returned rec
 
 * [Microsoft.CrmSdk.XrmTooling.CoreAssembly](https://www.nuget.org/packages/Microsoft.CrmSdk.XrmTooling.CoreAssembly/)
 
+* Create a Dynamics 365 environment
+
+* Create an Azure Active Directory application [quick start](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-windows-desktop)
+
 ## Quick Start
 
-* Running as an Application User:
+** Running as an Application User**
+
+* Create a Dynamics application user and give it access to the Azure Active Directory application
+
+* Give the `System Customizer` or `System Administrator` role to the application user to control access to the DataVerse.
 
 Edit `Secrets.cs` to use your own environment and secrets.
 

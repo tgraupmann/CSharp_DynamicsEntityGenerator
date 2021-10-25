@@ -103,10 +103,12 @@ namespace DynamicsEntityGenerator
             }
         }
 
-        static void Example_AddRecord(AutoGeneratorClient client, string dataPath, Guid ownerId)
+        static Account Example_AddRecord(AutoGeneratorClient client, string dataPath, Guid ownerId)
         {
-            var account = client.NewRecord<Account>(ownerId);
-            account.name = string.Format("Test - {0}", Guid.NewGuid());
+            string accountName = string.Format("Test - {0}", Guid.NewGuid());
+
+            Account account = client.NewRecord<Account>(ownerId);
+            account.name = accountName;
             account.accountid = client.Add(account);
 
             if (account.accountid != Guid.Empty)
@@ -116,7 +118,20 @@ namespace DynamicsEntityGenerator
                 ColumnSet columnSet = new ColumnSet(true);
                 var result = client.Retrieve<Account>(account.accountid, columnSet);
                 client.SaveCSV(Path.Combine(dataPath, "Account_Created_Queried.csv"), account);
+
+                return account;
             }
+            return null;
+        }
+
+        static void Example_DeleteRecord(AutoGeneratorClient client, Account account)
+        {
+            if (null == account || account.accountid == Guid.Empty)
+            {
+                return;
+            }
+
+            client.Delete<Account>(account.accountid);
         }
 
         static void Example_QueryFilter(AutoGeneratorClient client, string dataPath)
@@ -138,7 +153,7 @@ namespace DynamicsEntityGenerator
             List <Account> records = client.RetrieveMultiple<Account>(query);
             if (records.Count > 0)
             {
-
+                client.SaveCSV(Path.Combine(dataPath, "Account_Filtered.csv"), records);
             }
         }
 
@@ -181,7 +196,11 @@ namespace DynamicsEntityGenerator
 
                 Example_QueryFilter(client, dataPath);
 
-                Example_AddRecord(client, dataPath, userid);
+                Account account = Example_AddRecord(client, dataPath, userid);
+                if (account != null)
+                {
+                    Example_DeleteRecord(client, account);
+                }
 
                 Example_GenerateEntityClasses(client, dataPath);
 

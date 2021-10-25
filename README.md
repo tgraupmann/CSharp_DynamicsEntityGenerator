@@ -86,7 +86,7 @@ List<AutoGeneratorClient.GenerateEntityItem> entityItems =
 client.GenerateClasses(dataPath, entityItems);
 ```
 
-* Query all entity records and easily save to CSV files.
+**Query all entity records and easily save to CSV files**
 
 ```
 client.QueryDatabaseToCSV<Account>(Path.Combine(dataPath, "Accounts.csv"));
@@ -97,7 +97,7 @@ client.QueryDatabaseToCSV<Task>(Path.Combine(dataPath, "Tasks.csv"));
 
 ![image_3](images/image_3.png)
 
-* Query a single record
+**Query a single record**
 
 ```
 ColumnSet columnSet = new ColumnSet(true);
@@ -105,7 +105,7 @@ Account record = client.Retrieve<Account>(
     Guid.Parse("93c71621-bd9f-e711-8122-000d3a2ba2ea"), columnSet);
 ```
 
-* Query multiple records
+**Query multiple records**
 
 ```
 ColumnSet columnSet = new ColumnSet(true);
@@ -115,7 +115,7 @@ query.TopCount = 100;
 List<Account> records = client.RetrieveMultiple<Account>(query);
 ```
 
-* Load CSV records and resave to compare data integrity.
+**Load CSV records and resave to compare data integrity**
 
 ```
 List<Account> accounts = client.LoadCSV<Account>(Path.Combine(dataPath, "Accounts.csv"));
@@ -133,7 +133,7 @@ client.SaveCSV(Path.Combine(dataPath, "Tasks2.csv"), tasks);
 
 ![image_2](images/image_2.png)
 
-* Create a record
+**Create a record**
 
 ```
 var account = client.NewRecord<Account>(ownerId);
@@ -141,7 +141,7 @@ account.name = string.Format("Test - {0}", Guid.NewGuid());
 account.accountid = client.Add(account);
 ```
 
-* Update a record
+**Update a record**
 
 ```
 var result = client.Retrieve<Account>(account.accountid, columnSet);
@@ -149,7 +149,7 @@ result.name = string.Format("{0}*", result.name); //add an asterisk so we can se
 client.Update(result);
 ```
 
-* Query with a filter
+**Query with a filter**
 
 ```
 QueryExpression query = client.NewQueryExpression<Account>();
@@ -167,4 +167,10 @@ ConditionExpression condition =
 filter.AddCondition(condition);
 
 List <Account> records = client.RetrieveMultiple<Account>(query);
+```
+
+**Delete a record**
+
+```
+client.Delete<Account>(account.accountid);
 ```

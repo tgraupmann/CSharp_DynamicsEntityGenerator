@@ -338,7 +338,7 @@ namespace DynamicsEntityGenerator
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine("Failed to delete {0} record! {0}", typeof(T), ex);
+                Console.Error.WriteLine("Failed to delete {0} record! {1}", typeof(T), ex);
             }
         }
 

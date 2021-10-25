@@ -12,7 +12,7 @@ This C# project that queries your Dynamics environment and uses the returned rec
 
 * Create a Dynamics 365 environment
 
-* Create an Azure Active Directory application -  Guide: [Quickstart: Acquire a token and call Microsoft Graph API from a Windows desktop app](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-windows-desktop)
+* Create an Azure Active Directory application -  [Quickstart: Acquire a token and call Microsoft Graph API from a Windows desktop app](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-windows-desktop)
 
 ## Quick Start
 

@@ -16,7 +16,7 @@ This C# project that queries your Dynamics environment and uses the returned rec
 
 ## Quick Start
 
-** Running as an Application User**
+**Running as an Application User**
 
 * Create a Dynamics application user and give it access to the Azure Active Directory application
 

@@ -133,6 +133,14 @@ client.SaveCSV(Path.Combine(dataPath, "Tasks2.csv"), tasks);
 
 ![image_2](images/image_2.png)
 
+* Create a record
+
+```
+var account = client.NewRecord<Account>(ownerId);
+account.name = string.Format("Test - {0}", Guid.NewGuid());
+account.accountid = client.Add(account);
+```
+
 * Update a record
 
 ```
